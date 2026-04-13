@@ -73,6 +73,7 @@
 
         <div class="mini">
           <h3>Stats</h3>
+          <div class="stat">Wave: <b id="wave">1</b></div>
           <div class="stat">Enemies: <b id="enemies">0</b></div>
           <div class="stat">Shots: <b id="shots">0</b></div>
           <div class="stat">FPS: <b id="fps">0</b></div>
@@ -88,20 +89,6 @@
   </main>
 
   <!-- Dropdown JS (beginner) -->
-  <script>
-    var privacyBtn = document.getElementById("privacyBtn");
-    var privacyMenu = document.getElementById("privacyMenu");
-
-    privacyBtn.onclick = function () {
-      privacyMenu.classList.toggle("open");
-    };
-
-    document.addEventListener("click", function (e) {
-      if (!privacyBtn.contains(e.target) && !privacyMenu.contains(e.target)) {
-        privacyMenu.classList.remove("open");
-      }
-    });
-  </script>
 
   <script src="game.js"></script>
 </body>
