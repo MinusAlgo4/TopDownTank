@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tile Tank Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+
+      <!-- Logo is a nice link to index.html -->
+      <a class="brand" href="index.html">TOP DOWN TANK</a>
+
+      <nav class="nav">
+        <a href="guide.html">Guide</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="privacy.html">Privacy Policy</a>
+      </nav>
+
+      <div class="auth">
+        <a class="pill" href="signin.html">Sign in</a>
+        <a class="pill" href="signup.html">Sign up</a>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- GAME -->
+    <div class="card game-card">
+      <div class="game-frame">
+        <div class="game-area">
+          <canvas id="c" width="832" height="576"></canvas>
+
+          <div id="overlay" class="overlay">
+            <div class="overlay-box">
+              <div class="overlay-title">TOP DOWN TANK</div>
+              <div class="overlay-sub">Press Start to play</div>
+
+              <button id="startBtn" class="bigbtn">START</button>
+              <button id="exitBtn" class="bigbtn gray">EXIT</button>
+
+              <div class="overlay-hint">
+                Move: <b>WASD/Arrows</b> · Shoot: <b>Space</b> · Menu: <b>Esc</b>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- INFO PANEL UNDER GAME -->
+    <div class="card info-card">
+      <div class="info-top">
+        <h2 style="margin:0;">Tank Game Info</h2>
+        <div class="badge">● Pure HTML/CSS/JS + Canvas</div>
+      </div>
+
+      <div class="info-grid">
+        <div class="mini">
+          <h3>Controls</h3>
+          <div class="line"><b>WASD</b> / <b>Arrow Keys</b> — Move</div>
+          <div class="line"><b>Space</b> — Shoot</div>
+          <div class="line"><b>R</b> — Restart</div>
+          <div class="line"><b>Esc</b> — Menu</div>
+        </div>
+
+        <div class="mini">
+          <h3>Stats</h3>
+          <div class="stat">Enemies: <b id="enemies">0</b></div>
+          <div class="stat">Shots: <b id="shots">0</b></div>
+          <div class="stat">FPS: <b id="fps">0</b></div>
+
+          <div class="btn-row">
+            <button id="restartBtn" class="smallbtn">Restart</button>
+            <button id="newMapBtn" class="smallbtn">New Map</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Dropdown JS (beginner) -->
+  <script>
+    var privacyBtn = document.getElementById("privacyBtn");
+    var privacyMenu = document.getElementById("privacyMenu");
+
+    privacyBtn.onclick = function () {
+      privacyMenu.classList.toggle("open");
+    };
+
+    document.addEventListener("click", function (e) {
+      if (!privacyBtn.contains(e.target) && !privacyMenu.contains(e.target)) {
+        privacyMenu.classList.remove("open");
+      }
+    });
+  </script>
+
+  <script src="game.js"></script>
+</body>
+</html>
