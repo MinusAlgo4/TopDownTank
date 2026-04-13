@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const restartBtn = document.getElementById("restartBtn");
   const newMapBtn = document.getElementById("newMapBtn");
 
+  const uiWave = document.getElementById("wave");
   const uiEnemies = document.getElementById("enemies");
   const uiShots = document.getElementById("shots");
   const uiFps = document.getElementById("fps");
@@ -226,44 +227,84 @@ document.addEventListener("DOMContentLoaded", function () {
     return { owner, x, y, dir, r: 3, alive: true };
   }
 
+
   let player;
   let enemies = [];
   let bullets = [];
+  let currentWave = 1;
+  const MAX_WAVES = 10;
+  let waveCleared = false;
+  let gameWon = false;
 
-  function resetGame(newMap = false) {
-    if (newMap) generateMap();
+  function getEnemyCountForWave(wave) {
+  return Math.min(2 + wave, 12);
+}
 
-    bullets = [];
-    enemies = [];
+function spawnWave() {
+  enemies = [];
+  bullets = [];
+
+  const spawnPoints = [
+    [TILE * 5, TILE * 3],
+    [TILE * (COLS - 6), TILE * 3],
+    [TILE * (COLS / 2), TILE * 3],
+    [TILE * 3, TILE * 6],
+    [TILE * (COLS - 4), TILE * 6]
+  ];
+
+  const enemyCount = getEnemyCountForWave(currentWave);
+
+  for (let i = 0; i < enemyCount; i++) {
+    const spot = spawnPoints[i % spawnPoints.length];
+    const [sx, sy] = spot;
+
+    const e = makeTank(
+      sx + rand(-20, 20),
+      sy + rand(-10, 10),
+      "#ffd24a",
+      true
+    );
+
+    e.dir = choice([DIRS.D, DIRS.L, DIRS.R]);
+
+    // harder each wave
+    e.speed = ENEMY_SPEED + (currentWave - 1) * 6;
+    e.fireRate = Math.max(0.35, ENEMY_FIRE_COOLDOWN - (currentWave - 1) * 0.04);
+
+    for (let k = 0; k < 20; k++) {
+      if (!boxBlocked(tankBox(e))) break;
+      e.x += rand(-TILE, TILE);
+      e.y += rand(-TILE, TILE);
+    }
+
+    enemies.push(e);
+  }
+
+  waveCleared = false;
+}
+
+function resetGame(newMap = false, fullRestart = true) {
+  if (newMap) generateMap();
+
+  bullets = [];
+
+  if (fullRestart) {
+    currentWave = 1;
+    gameWon = false;
 
     player = makeTank(TILE * 3, TILE * (ROWS - 3), "#66c2ff", false);
     player.dir = DIRS.U;
-
-    const spawnPoints = [
-      [TILE * 5, TILE * 3],
-      [TILE * (COLS - 6), TILE * 3],
-      [TILE * (COLS / 2), TILE * 3],
-    ];
-
-    // fewer enemies = cleaner screen
-    for (let i = 0; i < 3; i++) {
-      const [sx, sy] = spawnPoints[i % spawnPoints.length];
-      const e = makeTank(
-        sx + rand(-20, 20),
-        sy + rand(-10, 10),
-        "#ffd24a",
-        true
-      );
-      e.dir = choice([DIRS.D, DIRS.L, DIRS.R]);
-
-      for (let k = 0; k < 20; k++) {
-        if (!boxBlocked(tankBox(e))) break;
-        e.x += rand(-TILE, TILE);
-        e.y += rand(-TILE, TILE);
-      }
-      enemies.push(e);
-    }
+  } else {
+    // keep player alive between waves, but move back to start
+    player.x = TILE * 3;
+    player.y = TILE * (ROWS - 3);
+    player.dir = DIRS.U;
+    player.alive = true;
+    player.fireCd = 0;
   }
+
+  spawnWave();
+}
 
   // ===== Input (plus pause) =====
   const keys = new Set();
@@ -283,12 +324,12 @@ document.addEventListener("DOMContentLoaded", function () {
   exitBtn.addEventListener("click", showMenu);
 
   restartBtn.addEventListener("click", () => {
-    resetGame(false);
+    resetGame(false, true);
     startGame();
   });
 
   newMapBtn.addEventListener("click", () => {
-    resetGame(true);
+    resetGame(true, true);
     startGame();
   });
 
@@ -297,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
     keys.add(e.key.toLowerCase());
 
     if (e.key.toLowerCase() === "r") {
-      resetGame(false);
+      resetGame(false,true);
       startGame();
     }
 
@@ -325,14 +366,19 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function tryShoot(tank) {
-    if (tank.fireCd > 0) return;
-    tank.fireCd = tank.isEnemy ? ENEMY_FIRE_COOLDOWN : FIRE_COOLDOWN;
+  if (tank.fireCd > 0) return;
 
-    const muzzle = 16;
-    const bx = tank.x + tank.dir.x * muzzle;
-    const by = tank.y + tank.dir.y * muzzle;
-    bullets.push(makeBullet(tank, bx, by, tank.dir));
+  if (tank.isEnemy) {
+    tank.fireCd = tank.fireRate || ENEMY_FIRE_COOLDOWN;
+  } else {
+    tank.fireCd = FIRE_COOLDOWN;
   }
+
+  const muzzle = 16;
+  const bx = tank.x + tank.dir.x * muzzle;
+  const by = tank.y + tank.dir.y * muzzle;
+  bullets.push(makeBullet(tank, bx, by, tank.dir));
+}
 
   function bulletStep(b, dt) {
     b.x += b.dir.x * BULLET_SPEED * dt;
@@ -373,24 +419,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ===== Enemy AI =====
   function enemyBrain(e, dt) {
-    e.brainCd -= dt;
-    if (e.brainCd <= 0) {
-      e.brainCd = rand(0.35, 1.2);
-      if (Math.random() < 0.55) e.dir = choice([DIRS.U, DIRS.D, DIRS.L, DIRS.R]);
-      if (Math.random() < 0.60) tryShoot(e);
-    }
-
-    const vx = e.dir.x * ENEMY_SPEED;
-    const vy = e.dir.y * ENEMY_SPEED;
-
-    const before = { x: e.x, y: e.y };
-    moveTank(e, vx, vy, dt);
-
-    // if stuck -> pick new direction
-    if (Math.abs(e.x - before.x) < 0.01 && Math.abs(e.y - before.y) < 0.01) {
-      e.dir = choice([DIRS.U, DIRS.D, DIRS.L, DIRS.R]);
-    }
+  e.brainCd -= dt;
+  if (e.brainCd <= 0) {
+    e.brainCd = rand(0.35, 1.2);
+    if (Math.random() < 0.55) e.dir = choice([DIRS.U, DIRS.D, DIRS.L, DIRS.R]);
+    if (Math.random() < 0.60) tryShoot(e);
   }
+
+  const enemySpeed = e.speed || ENEMY_SPEED;
+  const vx = e.dir.x * enemySpeed;
+  const vy = e.dir.y * enemySpeed;
+
+  const before = { x: e.x, y: e.y };
+  moveTank(e, vx, vy, dt);
+
+  // if stuck -> pick new direction
+  if (Math.abs(e.x - before.x) < 0.01 && Math.abs(e.y - before.y) < 0.01) {
+    e.dir = choice([DIRS.U, DIRS.D, DIRS.L, DIRS.R]);
+  }
+}
 
   // ===== Rendering =====
   function drawMap(timeSec) {
@@ -442,12 +489,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function drawHUD() {
-    ctx.fillStyle = "rgba(0,0,0,0.35)";
-    ctx.fillRect(10, canvas.height - 36, 330, 26);
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
-    ctx.font = "12px Arial";
-    ctx.fillText("Move: WASD/Arrows | Shoot: Space | Restart: R | Esc: Menu", 18, canvas.height - 18);
-  }
+  ctx.fillStyle = "rgba(0,0,0,0.35)";
+  ctx.fillRect(10, canvas.height - 36, 430, 26);
+  ctx.fillStyle = "rgba(255,255,255,0.9)";
+  ctx.font = "12px Arial";
+  ctx.fillText(
+    "Wave: " + currentWave + "/" + MAX_WAVES + " | Move: WASD/Arrows | Shoot: Space | Restart: R | Esc: Menu",
+    18,
+    canvas.height - 18
+  );
+}
 
   // ===== Loop =====
   let last = performance.now();
@@ -492,9 +543,30 @@ document.addEventListener("DOMContentLoaded", function () {
       for (const b of bullets) if (b.alive) bulletStep(b, dt);
       bullets = bullets.filter(b => b.alive);
 
-      // if all enemies dead -> restart round
-      if (enemies.every(e => !e.alive)) resetGame(false);
-    }
+      // next wave
+      if (!waveCleared && enemies.length > 0 && enemies.every(e => !e.alive)) {
+        waveCleared = true;
+
+        if (currentWave < MAX_WAVES) {
+          currentWave++;
+
+          setTimeout(function () {
+            if (!gameWon) {
+              spawnWave();
+            }
+          }, 1200);
+
+        } else {
+          gameWon = true;
+          running = false;
+          overlay.classList.remove("hidden");
+
+          document.querySelector(".overlay-title").textContent = "YOU WIN!";
+          document.querySelector(".overlay-sub").textContent = "You cleared all 10 waves.";
+          startBtn.textContent = "PLAY AGAIN";
+        }
+          }
+        }
 
     // draw always
     ctx.fillStyle = "#0f1418";
@@ -508,6 +580,7 @@ document.addEventListener("DOMContentLoaded", function () {
     drawBullets();
     drawHUD();
 
+    if (uiWave) uiWave.textContent = String(currentWave);
     uiEnemies.textContent = String(enemies.filter(e => e.alive).length);
     uiShots.textContent = String(bullets.length);
 
@@ -516,7 +589,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ===== Start =====
   generateMap();
-  resetGame(false);
+  resetGame(false, true);
   showMenu(); // start paused with overlay visible
   requestAnimationFrame(step);
 });
