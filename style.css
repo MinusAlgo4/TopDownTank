@@ -1,21 +1,20 @@
-
 :root{
   /* Backgrounds */
-  --bg:#0f141c;          /* page background (dark like game) */
-  --card:#151c26;        /* cards/nav background */
-  --text:#eaf0ff;        /* main text */
-  --muted:#aab6d3;       /* muted text */
+  --bg:#0f141c;
+  --card:#151c26;
+  --text:#eaf0ff;
+  --muted:#aab6d3;
   --line:rgba(255,255,255,0.12);
   --shadow: 0 18px 50px rgba(0,0,0,0.55);
 
   /* Tabs (nav buttons) */
-  --tab:rgba(102,194,255,0.14);   /* blue glow */
-  --tabText:#66c2ff;              /* player blue */
+  --tab:rgba(102,194,255,0.14);
+  --tabText:#66c2ff;
   --tabHover:rgba(102,194,255,0.22);
 
   /* Buttons */
-  --btn:#ffd24a;        /* gold like bullets */
-  --btnText:#1a1a1a;    /* dark text on gold */
+  --btn:#ffd24a;
+  --btnText:#1a1a1a;
 
   --radius:18px;
 }
@@ -48,8 +47,8 @@ body{
 .brand{
   font-size: 30px;
   font-weight: 900;
-  color: #ffd24a;          /* nice brand color */
-  text-decoration: none;   /* NOT link style */
+  color: #ffd24a;
+  text-decoration: none;
   padding: 6px 10px;
   border-radius: 12px;
 }
@@ -67,7 +66,7 @@ body{
 }
 
 .nav a, .dropbtn{
-  text-decoration:none;  /* no underline */
+  text-decoration:none;
   color: var(--tabText);
   background: var(--tab);
   border: 1px solid #d9e1ff;
@@ -154,12 +153,12 @@ body{
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #ccc;
-  text-align: center; /* text centered inside input */
+  text-align: center;
 }
 
 .contact-card button {
   display: block;
-  margin: 20px auto 0 auto;   /* auto left & right = center */
+  margin: 20px auto 0 auto;
 }
 
 /* ---------- Game ---------- */
@@ -333,9 +332,7 @@ canvas{
   flex-direction:column;
   gap: 12px;
   padding-top: 8px;
-  
 }
-
 
 label{ font-weight: 900; }
 input, textarea{
@@ -343,7 +340,7 @@ input, textarea{
   border-radius: 12px;
   border: 1px solid #cfd6e6;
   font-size: 16px;
-  background-color: #d6deea;;
+  background-color: #d6deea;
 }
 textarea{ min-height: 120px; resize: vertical; }
 
@@ -393,5 +390,5 @@ textarea{ min-height: 120px; resize: vertical; }
 
 /* Reduce spacing only for sign pages */
 .auth-card .row{
-  margin-bottom: 8px;   /* smaller than contact */
+  margin-bottom: 8px;
 }
