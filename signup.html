@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign up</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">TOP DOWN TANK</a>
+
+    <nav class="nav">
+      <a href="guide.html">Guide</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="auth">
+      <a class="pill" href="signin.html">Sign in</a>
+      <a class="pill" href="signup.html">Sign up</a>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page">
+    <div class="page-title">Sign up Page</div>
+
+    <div class="card contact-card auth-card">
+      <form class="form" id="signupForm">
+
+        <div class="row">
+          <label for="suFirst">First name</label>
+          <input id="suFirst" type="text" placeholder="first name" />
+        </div>
+
+        <div class="row">
+          <label for="suLast">Last name</label>
+          <input id="suLast" type="text" placeholder="last name" />
+        </div>
+
+        <div class="row">
+          <label for="suEmail">Email</label>
+          <input id="suEmail" type="email" placeholder="email" />
+        </div>
+
+        <div class="row">
+          <label for="suPass">Password</label>
+          <input id="suPass" type="password" placeholder="password" />
+        </div>
+
+        <div class="row">
+          <label for="suPass2">Confirm password</label>
+          <input id="suPass2" type="password" placeholder="confirm password" />
+        </div>
+
+        <div class="form-actions">
+          <button class="primary" type="submit">Sign up</button>
+          <div class="auth-link">
+            Already have account? <a href="signin.html">Sign in</a>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</main>
+
+<!-- ✅ IMPORTANT: Load app.js so alerts work -->
+<script src="app.js"></script>
+
+</body>
+</html>
