@@ -171,7 +171,7 @@ body{
 .game-frame{
   width: min(800px, 100%);
   margin: 0 auto;
-  background:#fff;
+  background: rgba(255, 210, 74, 0.18);
   border: 2px solid #222;
   border-radius: 18px;
   padding: 14px;
