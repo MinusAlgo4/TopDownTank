@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :root{
   /* Backgrounds */
   --bg:#0f141c;          /* page background (dark like game) */
@@ -393,4 +394,401 @@ textarea{ min-height: 120px; resize: vertical; }
 /* Reduce spacing only for sign pages */
 .auth-card .row{
   margin-bottom: 8px;   /* smaller than contact */
+=======
+:root{
+  /* Backgrounds */
+  --bg:#0f141c;          /* page background (dark like game) */
+  --card:#151c26;        /* cards/nav background */
+  --text:#eaf0ff;        /* main text */
+  --muted:#aab6d3;       /* muted text */
+  --line:rgba(255,255,255,0.12);
+  --shadow: 0 18px 50px rgba(0,0,0,0.55);
+
+  /* Tabs (nav buttons) */
+  --tab:rgba(102,194,255,0.14);   /* blue glow */
+  --tabText:#66c2ff;              /* player blue */
+  --tabHover:rgba(102,194,255,0.22);
+
+  /* Buttons */
+  --btn:#ffd24a;        /* gold like bullets */
+  --btnText:#1a1a1a;    /* dark text on gold */
+
+  --radius:18px;
+}
+
+*{ box-sizing:border-box; }
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ---------- Header ---------- */
+.header{
+  background: rgba(21,28,38,0.95);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+
+.header-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  display:flex;
+  align-items:center;
+  gap: 14px;
+}
+
+/* Logo becomes a nice link */
+.brand{
+  font-size: 30px;
+  font-weight: 900;
+  color: #ffd24a;          /* nice brand color */
+  text-decoration: none;   /* NOT link style */
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+.brand:hover{
+  background: var(--tabHover);
+}
+
+/* Nav tabs */
+.nav{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap: 10px;
+}
+
+.nav a, .dropbtn{
+  text-decoration:none;  /* no underline */
+  color: var(--tabText);
+  background: var(--tab);
+  border: 1px solid #d9e1ff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 16px;
+  cursor:pointer;
+}
+
+.nav a:hover, .dropbtn:hover{
+  background: var(--tabHover);
+}
+
+.nav a.active{
+  background:#dbe4ff;
+  border-color:#c6d2ff;
+}
+
+/* Right auth buttons */
+.auth{ display:flex; gap: 10px; }
+.auth a{
+  text-decoration:none;
+}
+.pill{
+  background: var(--btn);
+  color: var(--btnText);
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 900;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+}
+.pill:hover{ opacity: 0.92; }
+
+/* ---------- Main Layout ---------- */
+.main{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 22px 16px 60px;
+}
+
+/* “Wireframe style” pages */
+.page{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap: 18px;
+}
+
+.page-title{
+  font-size: 46px;
+  font-weight: 900;
+  margin: 20px 0 0;
+  text-align:center;
+}
+
+.card{
+  width: min(920px, 96vw);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+/* Each form row */
+.contact-card .row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+/* Label style */
+.contact-card label {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+/* Input and textarea */
+.contact-card input,
+.contact-card textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  text-align: center; /* text centered inside input */
+}
+
+.contact-card button {
+  display: block;
+  margin: 20px auto 0 auto;   /* auto left & right = center */
+}
+
+/* ---------- Game ---------- */
+.game-card{
+  width: min(920px, 96vw);
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.game-frame{
+  width: min(800px, 100%);
+  margin: 0 auto;
+  background:#fff;
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.game-area{
+  position:relative;
+  border: 2px solid #222;
+  border-radius: 14px;
+  overflow:hidden;
+  background:#0b1018;
+}
+
+canvas{
+  width:100%;
+  height:auto;
+  display:block;
+  image-rendering: pixelated;
+}
+
+/* Start menu overlay */
+.overlay{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  background: rgba(0,0,0,0.55);
+}
+.hidden{ display:none; }
+
+.overlay-box{
+  width: min(420px, 92%);
+  background: rgba(20,25,34,0.92);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 16px;
+  text-align:center;
+  color:#fff;
+}
+
+.overlay-title{
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.overlay-sub{
+  margin-top: 6px;
+  margin-bottom: 12px;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+}
+
+.bigbtn{
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  font-weight: 900;
+  border: 1px solid rgba(255,255,255,0.16);
+  cursor:pointer;
+  margin: 6px 0;
+  color:#fff;
+  background: rgba(255,210,74,0.18);
+}
+.bigbtn:hover{ background: rgba(255,210,74,0.24); }
+
+.bigbtn.gray{
+  background: rgba(255,255,255,0.10);
+}
+.bigbtn.gray:hover{ background: rgba(255,255,255,0.14); }
+
+.overlay-hint{
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+}
+
+/* Info panel under game */
+.info-card{
+  width: min(920px, 96vw);
+  margin: 14px auto 0;
+  background: var(--card);
+  color: #e8f1ff;
+}
+
+.info-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.badge{
+  background:#111;
+  color:#fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mini{
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  background: var(--line);
+}
+
+.mini h3{
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.line{
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.line b{
+  color:#66c2ff;
+  font-weight:900;
+}
+
+.stat{
+  margin: 7px 0;
+  font-size: 14px;
+}
+
+.btn-row{
+  margin-top: 10px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.smallbtn{
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #cfd6e6;
+  background:#fff;
+  font-weight: 900;
+  cursor:pointer;
+}
+.smallbtn:hover{ background:#f4f6ff; }
+
+/* ---------- Forms (Contact / Sign in / Sign up) ---------- */
+.form{
+  width: min(520px, 92vw);
+  margin: 0 auto;
+  display:flex;
+  flex-direction:column;
+  gap: 12px;
+  padding-top: 8px;
+  
+}
+
+
+label{ font-weight: 900; }
+input, textarea{
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #cfd6e6;
+  font-size: 16px;
+  background-color: #d6deea;;
+}
+textarea{ min-height: 120px; resize: vertical; }
+
+.form-actions{
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items:center;
+}
+
+.primary{
+  background:#fff;
+  color:black;
+  border:none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor:pointer;
+}
+
+.primary:hover{ opacity: 0.92; }
+
+.link{
+  color:#2346d9;
+  font-weight: 900;
+  text-decoration:none;
+}
+.link:hover{ text-decoration: underline; }
+
+/* Mobile */
+@media (max-width: 750px){
+  .nav{ flex-wrap: wrap; justify-content:flex-start; }
+  .brand{ font-size: 26px; }
+  .page-title{ font-size: 36px; }
+  .info-grid{ grid-template-columns: 1fr; }
+}
+
+.page .form-actions{
+  display: block !important;
+  text-align: center;
+}
+
+.page .primary{
+  display: block;
+  margin: 0 auto 12px auto;
+}
+
+/* Reduce spacing only for sign pages */
+.auth-card .row{
+  margin-bottom: 8px;   /* smaller than contact */
+>>>>>>> 3e8642cb1a393cddf0a16c55c34a64d73d4368b0
 }
