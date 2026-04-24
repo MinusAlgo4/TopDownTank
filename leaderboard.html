@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Leaderboard</title>
+  <link rel="stylesheet" href="style.css?v=7" />
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">TOP DOWN TANK</a>
+
+    <nav class="nav">
+      <a href="guide.html">Guide</a>
+      <a class="active" href="leaderboard.html">Leaderboard</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="auth">
+      <a class="pill" href="signin.html">Sign in</a>
+      <a class="pill" href="signup.html">Sign up</a>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page">
+    <div class="page-title">Leaderboard</div>
+
+    <div class="card">
+      <h2 style="text-align:center;">Top Tank Scores</h2>
+      <p style="color:var(--muted); text-align:center;">
+        Scores are saved in the browser using localStorage.
+      </p>
+
+      <div id="leaderboardList"></div>
+
+      <div class="form-actions" style="margin-top:20px;">
+        <button id="clearLeaderboard" class="smallbtn">Clear Leaderboard</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="leaderboard.js"></script>
+</body>
+</html>

@@ -22,6 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const uiShots = document.getElementById("shots");
   const uiFps = document.getElementById("fps");
 
+  const LEADERBOARD_KEY = "tank_leaderboard_v1";
+  const SESSION_KEY = "tank_session_v1";
+  const USERS_KEY = "tank_users_v1";
+
+  let scoreSavedThisRun = false;
+
   ctx.imageSmoothingEnabled = false;
 
   // ===== Game constants =====
@@ -297,6 +303,7 @@ function resetGame(newMap = false, fullRestart = true) {
     currentWave = 1;
     gameWon = false;
     score = 0;
+    scoreSavedThisRun = false;
 
     player = makeTank(TILE * 3, TILE * (ROWS - 3), "#66c2ff", false);
     player.dir = DIRS.U;
@@ -581,6 +588,8 @@ function resetGame(newMap = false, fullRestart = true) {
           running = false;
           overlay.classList.remove("hidden");
 
+          saveScoreToLeaderboard();
+
           document.querySelector(".overlay-title").textContent = "YOU WIN!";
           document.querySelector(".overlay-sub").textContent =
             "You cleared all 10 waves. Final Score: " + score;
@@ -592,6 +601,8 @@ function resetGame(newMap = false, fullRestart = true) {
       if (!player.alive && !gameWon) {
         running = false;
         overlay.classList.remove("hidden");
+
+        saveScoreToLeaderboard();
 
         document.querySelector(".overlay-title").textContent = "GAME OVER";
         document.querySelector(".overlay-sub").textContent =
@@ -621,6 +632,73 @@ function resetGame(newMap = false, fullRestart = true) {
 
     requestAnimationFrame(step);
   }
+
+// For adding leaderboard 
+  function getCurrentPlayerName() {
+  const sessionText = localStorage.getItem(SESSION_KEY);
+
+  if (!sessionText) {
+    return "Guest";
+  }
+
+  try {
+    const session = JSON.parse(sessionText);
+    const email = session.email;
+
+    const usersText = localStorage.getItem(USERS_KEY);
+    const users = usersText ? JSON.parse(usersText) : [];
+
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].email === email) {
+        return users[i].first + " " + users[i].last;
+      }
+    }
+
+    return email || "Guest";
+  } catch (error) {
+    return "Guest";
+  }
+}
+
+function saveScoreToLeaderboard() {
+  if (scoreSavedThisRun) {
+    return;
+  }
+
+  scoreSavedThisRun = true;
+
+  const playerName = getCurrentPlayerName();
+  const date = new Date().toLocaleDateString();
+
+  const newScore = {
+    player: playerName,
+    score: score,
+    wave: currentWave,
+    date: date
+  };
+
+  let scores = [];
+
+  const data = localStorage.getItem(LEADERBOARD_KEY);
+
+  if (data) {
+    try {
+      scores = JSON.parse(data);
+    } catch (error) {
+      scores = [];
+    }
+  }
+
+  scores.push(newScore);
+
+  scores.sort(function (a, b) {
+    return b.score - a.score;
+  });
+
+  scores = scores.slice(0, 10);
+
+  localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(scores));
+}
 
   // ===== Start =====
   generateMap();
