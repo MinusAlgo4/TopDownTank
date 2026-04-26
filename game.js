@@ -689,7 +689,18 @@ function saveScoreToLeaderboard() {
     }
   }
 
-  scores.push(newScore);
+  let existing = scores.find(s => s.player === newScore.player);
+
+  //score replacing new high score
+  if (existing) {
+    if (newScore.score > existing.score) {
+      existing.score = newScore.score;
+      existing.wave = newScore.wave;
+      existing.date = newScore.date;
+    }
+  } else {
+    scores.push(newScore);
+  }
 
   scores.sort(function (a, b) {
     return b.score - a.score;
