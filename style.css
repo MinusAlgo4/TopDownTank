@@ -37,9 +37,10 @@ body{
 .header-inner{
   max-width: 1100px;
   margin: 0 auto;
-  padding: 14px 16px;
+  padding: 15px 16px;
   display:flex;
   align-items:center;
+  justify-content: space-between;
   gap: 14px;
 }
 
@@ -51,6 +52,7 @@ body{
   text-decoration: none;
   padding: 6px 10px;
   border-radius: 12px;
+  white-space: nowrap;
 }
 .brand:hover{
   background: var(--tabHover);
@@ -62,7 +64,11 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap: 10px;
+  gap: 8px;
+}
+
+.nav a {
+  white-space: nowrap;
 }
 
 .nav a, .dropbtn{
@@ -391,4 +397,24 @@ textarea{ min-height: 120px; resize: vertical; }
 /* Reduce spacing only for sign pages */
 .auth-card .row{
   margin-bottom: 8px;
+}
+
+/* For profile page*/
+
+.profile-mini{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#ffd24a;
+  color:#111;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  border:2px solid rgba(255,255,255,0.25);
 }

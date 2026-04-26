@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profile</title>
+  <link rel="stylesheet" href="style.css?v=7" />
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">TOP DOWN TANK</a>
+
+    <nav class="nav">
+      <a href="guide.html">Guide</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="auth" id="authArea">
+      <a class="pill" href="signin.html">Login</a>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page">
+    <div class="page-title">Profile</div>
+
+    <div class="card" style="text-align:center;">
+      <div id="profileAvatar" class="avatar" style="margin:0 auto 14px; width:80px; height:80px; font-size:34px;">?</div>
+
+      <h2 id="profileName">Guest</h2>
+      <p id="profileEmail" style="color:var(--muted);"></p>
+
+      <div class="info-grid" style="margin-top:20px;">
+        <div class="mini">
+          <h3>High Score</h3>
+          <div class="stat"><b id="profileHighScore">0</b></div>
+        </div>
+
+        <div class="mini">
+          <h3>Best Wave</h3>
+          <div class="stat"><b id="profileBestWave">0</b></div>
+        </div>
+      </div>
+
+      <div class="form-actions" style="margin-top:20px;">
+        <button id="logoutBtn" class="smallbtn">Logout</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script src="profile.js"></script>
+</body>
+</html>

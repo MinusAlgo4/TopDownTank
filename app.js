@@ -122,6 +122,36 @@ var contactForm = document.getElementById("contactForm");
       alert("Submitted! (Demo only — no server connected.)");
       contactForm.reset();
     });
-
-
   }
+
+  //For Profile authArea
+
+  function updateAuthArea() {
+    var authArea = document.getElementById("authArea");
+    if (!authArea) return;
+
+    var sessionText = localStorage.getItem("tank_session_v1");
+
+    if (!sessionText) {
+      authArea.innerHTML = '<a class="pill" href="signin.html">Login</a>';
+      return;
+    }
+
+    try {
+      var session = JSON.parse(sessionText);
+      var email = session.email || "User";
+      var firstLetter = email.charAt(0).toUpperCase();
+
+      authArea.innerHTML =
+        '<div class="profile-mini">' +
+          '<div class="avatar">' + firstLetter + '</div>' +
+          '<a class="pill" href="profile.html">Profile</a>' +
+        '</div>';
+    } catch (e) {
+      authArea.innerHTML = '<a class="pill" href="signin.html">Login</a>';
+    }
+  }
+  
+
+updateAuthArea();
+
