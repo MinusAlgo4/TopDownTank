@@ -329,6 +329,7 @@ function resetGame(newMap = false, fullRestart = true) {
   }
 
   function startGame() {
+    startAudio();
     running = true;
     overlay.classList.add("hidden");
   }
@@ -395,7 +396,11 @@ function resetGame(newMap = false, fullRestart = true) {
   const bx = tank.x + tank.dir.x * muzzle;
   const by = tank.y + tank.dir.y * muzzle;
   bullets.push(makeBullet(tank, bx, by, tank.dir));
-}
+
+  if (!tank.isEnemy) {
+    playShootSound();
+  }
+  }
 
   function bulletStep(b, dt) {
     b.x += b.dir.x * BULLET_SPEED * dt;
@@ -429,6 +434,8 @@ function resetGame(newMap = false, fullRestart = true) {
       if (hit) {
         tnk.alive = false;
         b.alive = false;
+
+        playHitSound();
 
         if (!b.owner.isEnemy) {
           score += 100;
@@ -589,6 +596,7 @@ function resetGame(newMap = false, fullRestart = true) {
           overlay.classList.remove("hidden");
 
           saveScoreToLeaderboard();
+          playWinSound();
 
           document.querySelector(".overlay-title").textContent = "YOU WIN!";
           document.querySelector(".overlay-sub").textContent =
@@ -603,6 +611,7 @@ function resetGame(newMap = false, fullRestart = true) {
         overlay.classList.remove("hidden");
 
         saveScoreToLeaderboard();
+        playGameOverSound();
 
         document.querySelector(".overlay-title").textContent = "GAME OVER";
         document.querySelector(".overlay-sub").textContent =
@@ -658,6 +667,72 @@ function resetGame(newMap = false, fullRestart = true) {
   } catch (error) {
     return "Guest";
   }
+}
+
+// ===== Sounds =====
+let audioCtx;
+let musicPlaying = false;
+
+function startAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+
+  if (!musicPlaying) {
+    playBackgroundMusic();
+    musicPlaying = true;
+  }
+}
+
+function beep(freq, duration, type = "square", volume = 0.05) {
+  if (!audioCtx) return;
+
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.value = volume;
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + duration);
+}
+
+function playShootSound() {
+  beep(650, 0.06, "square", 0.04);
+}
+
+function playHitSound() {
+  beep(180, 0.12, "sawtooth", 0.06);
+}
+
+function playGameOverSound() {
+  beep(120, 0.25, "sawtooth", 0.08);
+}
+
+function playWinSound() {
+  beep(520, 0.12, "triangle", 0.06);
+  setTimeout(() => beep(700, 0.12, "triangle", 0.06), 130);
+  setTimeout(() => beep(900, 0.18, "triangle", 0.06), 260);
+}
+
+function playBackgroundMusic() {
+  const notes = [220, 247, 262, 294, 262, 247];
+  let i = 0;
+
+  setInterval(function () {
+    if (!running || !audioCtx) return;
+
+    beep(notes[i % notes.length], 0.18, "triangle", 0.018);
+    i++;
+  }, 420);
 }
 
 function saveScoreToLeaderboard() {
